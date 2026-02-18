@@ -108,6 +108,19 @@ I resolved the "mismatch" by signing in with the TP-Link ID credentials establis
 **Why this is a "Technical Win"**
 By using ipconfig to find the gateway, I bypassed the "easy" setup path (which favors vendor data collection) in favor of a "hardened" setup path (which favors user privacy and local control). This ensured that my Device Isolation and Address Reservation settings were configured on the router itself, not just a cloud-cached version of it.
 
+**7🔍 Security Validation & Audit**
+To ensure the integrity of the segmentation, I performed a Layer 3 connectivity test (Ping) between the trusted Main segment and the hardened IoT segment.
+
+Source: Main Workstation (192.168.0.84)
+
+Destination: Isolated IoT Asset (192.168.0.214)
+
+Result: Destination Host Unreachable (100% Packet Loss).
+
+Technical Significance: This audit confirms that the Device Isolation and AP Hardening policies are successfully dropping unsolicited "East-West" traffic, effectively neutralizing the risk of lateral movement across the network.
+
+
+
 ## 🧠 Lessons Learned
 - **Inventory Verification is Key:** Initially, the "none" and "network device" IDs were confusing. Physically disconnecting the TP-Link T2UB Nano adapter confirmed that "Combo" devices (BT/Wi-Fi) often present as multiple MAC addresses.
 - **App vs. Web UI:** While mobile apps are convenient for "Day 1" setup, the Web UI is mandatory for "Day 2" hardening. Cloud-binding via the Tether app can obscure critical security controls.
