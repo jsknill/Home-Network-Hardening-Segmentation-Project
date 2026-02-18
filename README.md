@@ -108,7 +108,7 @@ I resolved the "mismatch" by signing in with the TP-Link ID credentials establis
 **Why this is a "Technical Win"**
 By using ipconfig to find the gateway, I bypassed the "easy" setup path (which favors vendor data collection) in favor of a "hardened" setup path (which favors user privacy and local control). This ensured that my Device Isolation and Address Reservation settings were configured on the router itself, not just a cloud-cached version of it.
 
-**7🔍 Security Validation & Audit**
+  **7🔍 Security Validation & Audit**
 To ensure the integrity of the segmentation, I performed a Layer 3 connectivity test (Ping) between the trusted Main segment and the hardened IoT segment.
 
 Source: Main Workstation (192.168.0.84)
