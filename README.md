@@ -119,7 +119,7 @@ Result: Destination Host Unreachable (100% Packet Loss).
 
 Technical Significance: This audit confirms that the Device Isolation and AP Hardening policies are successfully dropping unsolicited "East-West" traffic, effectively neutralizing the risk of lateral movement across the network.
 
-
+**[Confirmation of Ping]** https://github.com/jsknill/Home-Network-Hardening-Segmentation-Project/blob/main/AP_isolation_ping_confirmation.png
 
 ## 🧠 Lessons Learned
 - **Inventory Verification is Key:** Initially, the "none" and "network device" IDs were confusing. Physically disconnecting the TP-Link T2UB Nano adapter confirmed that "Combo" devices (BT/Wi-Fi) often present as multiple MAC addresses.
