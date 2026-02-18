@@ -82,7 +82,7 @@ Instead of relying on the app's redirected links, I navigated directly to http:/
 Credential Sync:
 I resolved the "mismatch" by signing in with the TP-Link ID credentials established during the Tether setup. This granted me the elevated permissions needed to "unbind" the cloud account and transition to a strictly Local Admin management model, which is a key step in reducing the router's external attack surface.
 
-[INSERT SCREENSHOT: PowerShell output of ipconfig]
+**[PowerShell output of ipconfig] https://github.com/jsknill/Home-Network-Hardening-Segmentation-Project/blob/main/ipconfig_redacted.png**
 
 **Why this is a "Technical Win"**
 By using ipconfig to find the gateway, I bypassed the "easy" setup path (which favors vendor data collection) in favor of a "hardened" setup path (which favors user privacy and local control). This ensured that my Device Isolation and Address Reservation settings were configured on the router itself, not just a cloud-cached version of it.
