@@ -48,7 +48,7 @@ HP Printer: Locked to 192.168.0.129
 
 Alexa Units: Locked to .213 and .214
 
-![Address Reservations] 
+**![Address Reservations] https://github.com/jsknill/Home-Network-Hardening-Segmentation-Project/blob/main/Network_clients_verification.png**
 
 📊 **Security Wins**
 
