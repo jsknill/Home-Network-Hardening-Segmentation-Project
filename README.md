@@ -37,9 +37,30 @@ IoT Devices: Moved Nest Cameras, Ring Doorbell, and Amazon Alexa units to the Io
 
 Legacy Consoles: Isolated Xbox 360 and Nintendo 3DS units to prevent them from becoming an entry point into the main data network.
 
-Printers: Moved the HP Envy 5540 to IoT to prevent printer-based exploit pivots.
+Printers (The "Local-Only" Pivot): Initially moved the HP Envy 5540 to the IoT segment; however, strict Layer 2 isolation blocked essential mDNS/discovery protocols.
 
-4. **Persistence & Stability (Address Reservations)**
+Strategic Realignment: Migrated the printer back to the Main segment to restore local handshake capabilities but implemented WAN-Side "Caging."
+
+The "Bedtime" Workaround: Since the router firmware lacked a "0-hour" internet limit, I leveraged the Parental Control "Bedtime" feature. By scheduling a 24-hour "Bedtime" (e.g., 12:00 AM to 11:59 PM), the printer is effectively blacklisted from the internet while remaining 100% available for local TCP/IP print services..
+
+Final Verification & Audit of printer:
+Local Connectivity: Confirmed successful print jobs and 0% packet loss via ping from the Main workstation.
+
+WAN Restriction: Attempted an external firmware update check from the printer's console; the request timed out as expected due to the Parental Control Bedtime scheduling.
+
+Persistence: Verified that the Address Reservation ensures these security policies remain bound to the device's MAC address even after a power cycle.
+
+
+4. **📡 AP Hardening & Multicast Management**
+To further secure the environment, I hardened the Wireless Access Point (AP) settings to control how devices communicate over the air:
+
+IGMP Snooping & Proxy: Enabled to manage multicast traffic (discovery packets) efficiently, ensuring the router only sends these packets to devices that actually request them.
+
+Wireless Multicast Forwarding: Activated to bridge discovery signals between Wi-Fi bands while maintaining logical separation.
+
+IoT AP Isolation: Finalized the hardening of the Home_IoT segment by enabling AP Isolation. This prevents "East-West" traffic, meaning a compromised smart bulb cannot "see" or attack a neighboring smart plug on the same 2.4GHz band.
+
+5. **Persistence & Stability (Address Reservations)**
 To ensure security rules and logging remain consistent, I implemented DHCP Address Reservations. This prevents "IP drifting" after power outages:
 
 Nest Camera: Locked to 192.168.0.156
@@ -58,7 +79,7 @@ Alexa Units: Locked to .213 and .214
 
 ✅ **Verified Metadata Privacy**: Opted out of third-party client identification services to keep device lists private to the local gateway.
 
-5. **Troubleshooting: The "Local Admin" Mismatch**
+6. **Troubleshooting: The "Local Admin" Mismatch**
 During the initial setup, I encountered a common "Cloud-Lock" issue where the TP-Link Tether app attempted to restrict management to a cloud-bound TP-Link ID, preventing advanced local hardening.
 
 The Challenge
@@ -95,8 +116,8 @@ By using ipconfig to find the gateway, I bypassed the "easy" setup path (which f
   
 🚀 **Future Roadmap**
 
-[ ] Implement AP Isolation within the IoT segment to prevent "east-west" traffic between smart devices.
+[x] Implement AP Isolation: Prevented "east-west" traffic within the IoT segment to stop lateral movement between smart devices.
 
-[ ] Configure Access Schedules to disable internet access for legacy consoles during overnight hours.
+[x] Local-Only IoT "Caging": Successfully used Access Schedules/Bedtime features to disable WAN access for high-risk peripherals.
 
-[ ] Transition to Wi-Fi 7 MLO (Multi-Link Operation) once compatible hardware is integrated into the primary workstation.
+[ ] Transition to Wi-Fi 7 MLO: Once compatible hardware is integrated into the primary workstation to leverage Multi-Link Operation.
