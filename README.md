@@ -94,6 +94,7 @@ By using ipconfig to find the gateway, I bypassed the "easy" setup path (which f
 
   
 🚀 **Future Roadmap**
+
 [ ] Implement AP Isolation within the IoT segment to prevent "east-west" traffic between smart devices.
 
 [ ] Configure Access Schedules to disable internet access for legacy consoles during overnight hours.
