@@ -28,6 +28,13 @@ OUI Analysis & "Pull-Testing": Conducted a physical inventory to resolve mystery
 
 MAC-to-IP Binding: Implemented DHCP Address Reservations to prevent "IP Drifting" and ensure security policies remain persistently bound to specific hardware IDs.
 
+Traffic Analysis & Telemetry (The "Free-Tier" Strategy):
+Since real-time granular telemetry on the Archer BE3600 is gated behind a subscription (HomeShield Pro), I implemented a Hybrid Host-Based Monitoring model to maintain zero-cost security:
+
+Host-Layer Visibility: Deployed Portmaster and GlassWire on the primary workstation. This provides application-layer auditing (e.g., identifying specific .exe files requesting outbound access) which exceeds the capabilities of standard router-level monitoring.
+
+Audit Verification: Used GlassWire’s usage breakdown to confirm that traffic to the HP Envy 5540 remains strictly within the LAN/WLAN boundary, verifying that the "Bedtime" WAN-block is active.
+
 **Phase 3: Attack Surface Reduction (The "Caging" Strategy)**
 I implemented a tiered isolation strategy based on device risk profiles:
 
