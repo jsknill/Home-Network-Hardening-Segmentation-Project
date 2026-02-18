@@ -1,66 +1,48 @@
-**Hardware: TP-Link Archer BE3600 (Wi-Fi 7 Router)**
+Residential Network Hardening & Advanced Segmentation
+Hardware: TP-Link Archer BE3600 (Wi-Fi 7)
 
-**Objective:** Transition from a "flat" unmanaged home network to a hardened, segmented architecture to reduce attack surface and isolate high-risk IoT/Legacy devices.
+Objective: Transition from a "flat" unmanaged network to a hardened, multi-segment architecture to minimize the attack surface and isolate high-risk IoT/Legacy assets.
 
 📋 Project Overview
-This project documents the end-to-end security hardening of a residential network. By leveraging a Wi-Fi 7 router's advanced management features, I implemented Network Segmentation, MAC-to-IP Binding, and Asset Identification to protect primary data-processing units from vulnerable IoT peripherals.
+This project documents the end-to-end security hardening of a residential gateway. By leveraging Wi-Fi 7 management features, I implemented VLAN-style Network Segmentation, Static DHCP Binding, and Layer 2/3 Isolation to shield primary data-processing units from vulnerable IoT peripherals.
 
-**"Note: All IP addresses shown are part of a private internal network (192.168.0.x) and are used for documentation and architectural demonstration purposes only."**
+Note: All IP addresses shown (192.168.0.x) pertain to a private internal network and are used exclusively for architectural demonstration.
 
 🏗️ Network Architecture
+The environment is divided into three logical segments to enforce the Principle of Least Privilege:
 
-The network is divided into three distinct logical segments (VLANs/SSIDs) to enforce the Principle of Least Privilege:
+Main Network: High-trust 5GHz/6GHz segment for primary workstations and authorized mobile devices.
 
-**Main Network**: Trusted,High-speed 5GHz/6GHz band for primary PCs and mobile devices.
-**Home IoT**: Untrusted, Isolated 2.4GHz band for "smart" devices, cameras, and legacy consoles.
-**Guest Network**: Minimal,Temporary access for visitors; 100% isolated from internal assets.
+Home IoT: Untrusted 2.4GHz segment for "smart" hardware, cameras, and legacy peripherals.
 
-🛠️ **Implementation Steps**
-1. **Baseline Hardening**
-Local Admin Migration: Shifted from cloud-based (TP-Link ID) management to Local Admin access via the Web UI (192.168.0.1) to reduce external dependencies and exposure.
+Guest Network: Temporary, 100% isolated segment for external visitors with zero internal resource access.
 
-Protocol Security: Implemented WPA2/WPA3 Personal mixed mode to maintain compatibility with legacy hardware (Xbox 360, Alexa) while providing maximum encryption for modern clients.
+🛠️ Implementation Steps
+Phase 1: Gateway & Protocol Hardening
+Management Plane Migration: Shifted from cloud-dependent (TP-Link ID) management to Local-Only Admin access. This reduces the external attack surface and eliminates vendor-cloud dependencies.
 
-2. **Asset Discovery & Documentation**
-One of the most critical phases was performing a full "Pull-Test" and OUI lookup to identify mystery devices.
+Cryptographic Standards: Deployed WPA3/WPA2 Mixed Mode, ensuring modern clients utilize the highest encryption standards while maintaining compatibility for legacy hardware (e.g., Alexa, Xbox 360).
 
-Discovery: Identified two unknown MAC addresses (08-A6-BC and D2-9C-AF).
+Phase 2: Asset Discovery & Identity Management
+OUI Analysis & "Pull-Testing": Conducted a physical inventory to resolve mystery MAC addresses. Identified a dual-interface TP-Link T2UB Nano (Bluetooth/Wi-Fi) through targeted disconnection.
 
-Validation: Through physical disconnection testing, confirmed these were the Wi-Fi and Bluetooth components of a TP-Link Archer T2UB Nano USB adapter.
+MAC-to-IP Binding: Implemented DHCP Address Reservations to prevent "IP Drifting" and ensure security policies remain persistently bound to specific hardware IDs.
 
-Labeling: Renamed all clients in the Network Map to ensure immediate recognition of unauthorized lateral movement.
+Phase 3: Attack Surface Reduction (The "Caging" Strategy)
+I implemented a tiered isolation strategy based on device risk profiles:
 
-3. **Attack Surface Reduction (Isolation)**
-Using Device Isolation, I "fenced off" high-risk devices that are notoriously poorly patched or have known vulnerabilities:
+IoT & Legacy Isolation: Leveraged Device Isolation to "fence off" Nest Cameras, Ring Doorbells, and legacy consoles (Xbox 360/3DS), preventing them from serving as pivot points.
 
-IoT Devices: Moved Nest Cameras, Ring Doorbell, and Amazon Alexa units to the IoT segment.
+Printer "Local-Only" Pivot: To resolve discovery issues (mDNS/WSD) caused by strict Layer 2 isolation, the HP Envy 5540 was migrated to the Main segment with Outbound WAN Filtering.
 
-Legacy Consoles: Isolated Xbox 360 and Nintendo 3DS units to prevent them from becoming an entry point into the main data network.
+The "Bedtime" Kill-Switch: Utilized Parental Control Access Schedules to impose a permanent "Bedtime" on the printer. This enforces a total WAN blackout—preventing unauthorized "phone-home" telemetry—while maintaining full LAN availability for trusted print services.
 
-Printers (The "Local-Only" Pivot): Initially moved the HP Envy 5540 to the IoT segment; however, strict Layer 2 isolation blocked essential mDNS/discovery protocols.
+Phase 4: AP Hardening & Multicast Control
+IGMP Snooping & Proxy: Optimized multicast delivery to ensure discovery packets are only routed to authorized subscribers.
 
-Strategic Realignment: Migrated the printer back to the Main segment to restore local handshake capabilities but implemented WAN-Side "Caging."
+Intra-BSS Traffic Blocking: Enabled AP Isolation on the IoT segment to prohibit "East-West" communication, ensuring a compromised smart bulb cannot interact with neighboring IoT assets.
 
-The "Bedtime" Workaround: Since the router firmware lacked a "0-hour" internet limit, I leveraged the Parental Control "Bedtime" feature. By scheduling a 24-hour "Bedtime" (e.g., 12:00 AM to 11:59 PM), the printer is effectively blacklisted from the internet while remaining 100% available for local TCP/IP print services..
-
-Final Verification & Audit of printer:
-Local Connectivity: Confirmed successful print jobs and 0% packet loss via ping from the Main workstation.
-
-WAN Restriction: Attempted an external firmware update check from the printer's console; the request timed out as expected due to the Parental Control Bedtime scheduling.
-
-Persistence: Verified that the Address Reservation ensures these security policies remain bound to the device's MAC address even after a power cycle.
-
-
-4. **📡 AP Hardening & Multicast Management**
-To further secure the environment, I hardened the Wireless Access Point (AP) settings to control how devices communicate over the air:
-
-IGMP Snooping & Proxy: Enabled to manage multicast traffic (discovery packets) efficiently, ensuring the router only sends these packets to devices that actually request them.
-
-Wireless Multicast Forwarding: Activated to bridge discovery signals between Wi-Fi bands while maintaining logical separation.
-
-IoT AP Isolation: Finalized the hardening of the Home_IoT segment by enabling AP Isolation. This prevents "East-West" traffic, meaning a compromised smart bulb cannot "see" or attack a neighboring smart plug on the same 2.4GHz band.
-
-5. **Persistence & Stability (Address Reservations)**
+Persistence & Stability (Address Reservations)
 To ensure security rules and logging remain consistent, I implemented DHCP Address Reservations. This prevents "IP drifting" after power outages:
 
 Nest Camera: Locked to 192.168.0.156
@@ -69,68 +51,57 @@ HP Printer: Locked to 192.168.0.129
 
 Alexa Units: Locked to .213 and .214
 
-**[Address Reservations] https://github.com/jsknill/Home-Network-Hardening-Segmentation-Project/blob/main/Network_clients_verification.png**
+[Address Reservations] https://github.com/jsknill/Home-Network-Hardening-Segmentation-Project/blob/main/Network_clients_verification.png
 
-📊 **Security Wins**
+🔍 Security Validation & Audit
+To verify the integrity of the segmentation, I conducted Layer 3 ICMP audit tests between segments:
 
-✅ **Zero Lateral Movement**: A compromise of an IoT device (e.g., the Ring Doorbell) no longer grants access to personal financial data on the main PCs.
+Source: Trusted Workstation (192.168.0.84)
 
-✅ **Reduced Interference**: Optimized the 5GHz band by offloading low-bandwidth IoT traffic to the 2.4GHz IoT segment.
-
-✅ **Verified Metadata Privacy**: Opted out of third-party client identification services to keep device lists private to the local gateway.
-
-6. **Troubleshooting: The "Local Admin" Mismatch**
-During the initial setup, I encountered a common "Cloud-Lock" issue where the TP-Link Tether app attempted to restrict management to a cloud-bound TP-Link ID, preventing advanced local hardening.
-
-The Challenge
-
-The Tether mobile app "binds" the router to a cloud account, which can obscure advanced security settings and create a dependency on external servers for local network management. When attempting to switch to the Web UI, I faced a "TP-Link ID vs. Local Admin" credential mismatch.
-
-The Resolution (The "Power User" Bypass)
-
-To regain full local control and ensure I was accessing the gateway directly, I performed the following:
-
-Gateway Identification:
-Used PowerShell (Windows 11) with Administrator privileges to verify the exact local gateway address.
-
-PowerShell
-ipconfig
-Result: Confirmed the Default Gateway as 192.168.0.1.
-
-Direct Browser Access:
-Instead of relying on the app's redirected links, I navigated directly to http://192.168.0.1 in a secure browser session.
-
-Credential Sync:
-I resolved the "mismatch" by signing in with the TP-Link ID credentials established during the Tether setup. This granted me the elevated permissions needed to "unbind" the cloud account and transition to a strictly Local Admin management model, which is a key step in reducing the router's external attack surface.
-
-**[PowerShell output of ipconfig] https://github.com/jsknill/Home-Network-Hardening-Segmentation-Project/blob/main/ipconfig_redacted.png**
-
-**Why this is a "Technical Win"**
-By using ipconfig to find the gateway, I bypassed the "easy" setup path (which favors vendor data collection) in favor of a "hardened" setup path (which favors user privacy and local control). This ensured that my Device Isolation and Address Reservation settings were configured on the router itself, not just a cloud-cached version of it.
-
-  **7🔍 Security Validation & Audit**
-To ensure the integrity of the segmentation, I performed a Layer 3 connectivity test (Ping) between the trusted Main segment and the hardened IoT segment.
-
-Source: Main Workstation (192.168.0.84)
-
-Destination: Isolated IoT Asset (192.168.0.214)
+Target: Isolated IoT Asset (192.168.0.214)
 
 Result: Destination Host Unreachable (100% Packet Loss).
 
-Technical Significance: This audit confirms that the Device Isolation and AP Hardening policies are successfully dropping unsolicited "East-West" traffic, effectively neutralizing the risk of lateral movement across the network.
+Conclusion: Verified that the firewall effectively drops unsolicited inter-segment traffic, successfully neutralizing the risk of lateral movement.
 
-**[Confirmation of Ping]** https://github.com/jsknill/Home-Network-Hardening-Segmentation-Project/blob/main/AP_isolation_ping_confirmation.png
+[Confirmation of Ping] https://github.com/jsknill/Home-Network-Hardening-Segmentation-Project/blob/main/AP_isolation_ping_confirmation.png
 
-## 🧠 Lessons Learned
-- **Inventory Verification is Key:** Initially, the "none" and "network device" IDs were confusing. Physically disconnecting the TP-Link T2UB Nano adapter confirmed that "Combo" devices (BT/Wi-Fi) often present as multiple MAC addresses.
-- **App vs. Web UI:** While mobile apps are convenient for "Day 1" setup, the Web UI is mandatory for "Day 2" hardening. Cloud-binding via the Tether app can obscure critical security controls.
-- **Hardware Limitations:** Discovered that while the router is Wi-Fi 7 (802.11be) capable, client-side hardware (Intel AC 3168) is the current bottleneck, emphasizing the importance of a phased upgrade path.
+📊 Security Wins
+✅ Lateral Movement Neutralized: A compromise of an IoT peripheral no longer grants visibility into sensitive financial or personal data.
 
-  
-🚀 **Future Roadmap**
+✅ Spectrum Optimization: Offloaded low-bandwidth IoT traffic to the 2.4GHz band, preserving 5GHz/6GHz airtime for high-performance tasks.
 
-[x] Implement AP Isolation: Prevented "east-west" traffic within the IoT segment to stop lateral movement between smart devices.
+✅ Verified Metadata Privacy: Opted out of third-party client identification to keep internal device lists local to the gateway.
 
-[x] Local-Only IoT "Caging": Successfully used Access Schedules/Bedtime features to disable WAN access for high-risk peripherals.
+Troubleshooting: The "Local Admin" Mismatch
+During the initial setup, I encountered a common "Cloud-Lock" issue where the TP-Link Tether app attempted to restrict management to a cloud-bound TP-Link ID, preventing advanced local hardening.
 
-[ ] Transition to Wi-Fi 7 MLO: Once compatible hardware is integrated into the primary workstation to leverage Multi-Link Operation.
+The Challenge
+The Tether mobile app "binds" the router to a cloud account, which can obscure advanced security settings and create a dependency on external servers for local network management. When attempting to switch to the Web UI, I faced a "TP-Link ID vs. Local Admin" credential mismatch.
+
+The Resolution (The "Power User" Bypass)
+To regain full local control and ensure I was accessing the gateway directly, I performed the following:
+
+Gateway Identification: Used PowerShell (Windows 11) with Administrator privileges to verify the exact local gateway address.
+
+PowerShell ipconfig Result: Confirmed the Default Gateway as 192.168.0.1.
+
+Direct Browser Access: Instead of relying on the app's redirected links, I navigated directly to http://192.168.0.1 in a secure browser session.
+
+Credential Sync: I resolved the "mismatch" by signing in with the TP-Link ID credentials established during the Tether setup. This granted me the elevated permissions needed to "unbind" the cloud account and transition to a strictly Local Admin management model.
+
+[PowerShell output of ipconfig] https://github.com/jsknill/Home-Network-Hardening-Segmentation-Project/blob/main/ipconfig_redacted.png
+
+🧠 Lessons Learned
+Discovery vs. Security: Strict isolation often breaks mDNS-dependent services. Security professionals must balance Segmentation with Operational Utility using tools like WAN-filtering.
+
+App vs. Web UI: Residential "Smart Apps" often obscure advanced security settings; direct Web UI access is mandatory for professional-grade hardening.
+
+Inventory Verification is Key: Initially, the "none" and "network device" IDs were confusing. Physically disconnecting the TP-Link T2UB Nano adapter confirmed that "Combo" devices (BT/Wi-Fi) often present as multiple MAC addresses.
+
+🚀 Future Roadmap
+[x] IoT AP Isolation: Prohibited lateral traffic within the 2.4GHz segment.
+
+[x] WAN Caging: Effectively utilized scheduling to disable internet access for high-risk assets.
+
+[ ] Wi-Fi 7 MLO Integration: Transition to Multi-Link Operation once compatible NICs are integrated into primary workstations.
