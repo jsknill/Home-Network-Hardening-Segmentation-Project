@@ -85,7 +85,7 @@ To verify the integrity of the segmentation, I conducted **Layer 4 Service Analy
 
 [Fing Port Scan Results - Printer] Insert_Link_To_Printer_Port_Scan_Pic_Here
 
-[Fing Port Scan Results - Alexa] Insert_Link_To_Alexa_Port_Scan_Pic_Here
+[Fing Port Scan Results - Alexa] https://github.com/jsknill/Home-Network-Hardening-Segmentation-Project/blob/main/Alexa_port_scan_results.png
 
 **3. Outbound WAN Verification (The Cage Check)**
 **Procedure:** Attempted a manual Firmware Update check from the HP Printer's console.
