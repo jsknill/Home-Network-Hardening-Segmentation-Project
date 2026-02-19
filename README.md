@@ -83,7 +83,7 @@ To verify the integrity of the segmentation, I conducted **Layer 4 Service Analy
 
 **Verification:** Confirms AP Isolation is active; devices are "visible" at Layer 2 but "unreachable" at Layer 3.
 
-[Fing Port Scan Results - Printer] Insert_Link_To_Printer_Port_Scan_Pic_Here
+[Fing Port Scan Results - Printer] https://github.com/jsknill/Home-Network-Hardening-Segmentation-Project/blob/main/printer_port_scan_results.png
 
 [Fing Port Scan Results - Alexa] https://github.com/jsknill/Home-Network-Hardening-Segmentation-Project/blob/main/Alexa_port_scan_results.png
 
