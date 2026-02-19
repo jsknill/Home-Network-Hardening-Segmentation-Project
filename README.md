@@ -94,7 +94,7 @@ To verify the integrity of the segmentation, I conducted **Layer 4 Service Analy
 
 **Significance:** Validates that the "Bedtime" schedule successfully severed the device's ability to communicate with external HP servers.
 
-[Firmware Update Failure Proof] Insert_Link_To_Firmware_Failure_Pic_Here
+[Firmware Update Failure Proof] https://github.com/jsknill/Home-Network-Hardening-Segmentation-Project/blob/main/Printer_firmware_failure_proof.png
 
 **📊 Security Wins**
 **✅ Lateral Movement Neutralized:** A compromise of an IoT peripheral no longer grants visibility into sensitive financial or personal data.
