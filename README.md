@@ -119,7 +119,7 @@ To verify the integrity of the segmentation, I conducted **Layer 4 Service Analy
 
 **✅ WAN Signature Obfuscated:** Successfully masked residential IP metadata; external auditors now see "Proton AG" rather than "Spectrum."
 
-✅** Guaranteed Fail-Safe:**  Verified that workstations are "caged" within the VPN; they will lose internet access entirely before ever leaking data onto the public web.
+**✅ Guaranteed Fail-Safe:**  Verified that workstations are "caged" within the VPN; they will lose internet access entirely before ever leaking data onto the public web.
 
 **Troubleshooting:** The "Local Admin" Mismatch
 During the initial setup, I encountered a common "Cloud-Lock" issue where the TP-Link Tether app attempted to restrict management to a cloud-bound TP-Link ID, preventing advanced local hardening.
