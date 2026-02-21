@@ -135,11 +135,11 @@ Gateway Identification: Used PowerShell (Windows 11) to verify the exact local g
 [PowerShell output of ipconfig] https://github.com/jsknill/Home-Network-Hardening-Segmentation-Project/blob/main/ipconfig_redacted.png
 
 🧠 **Lessons Learned**
-Discovery vs. Security: Strict isolation often breaks mDNS-dependent services. Security professionals must balance Segmentation with Operational Utility.
+**Discovery vs. Security:** Strict isolation often breaks mDNS-dependent services. Security professionals must balance Segmentation with Operational Utility.
 
-App vs. Web UI: Residential "Smart Apps" often obscure advanced security settings; direct Web UI access is mandatory for professional-grade hardening.
+**App vs. Web UI:** Residential "Smart Apps" often obscure advanced security settings; direct Web UI access is mandatory for professional-grade hardening.
 
-Inventory Verification is Key: Identified dual-interface devices (BT/Wi-Fi) that initially appeared as "mystery" nodes.
+**Inventory Verification is Key:** Identified dual-interface devices (BT/Wi-Fi) that initially appeared as "mystery" nodes.
 
 **🚀 Future Roadmap**
 **[x] IoT AP Isolation:** Prohibited lateral traffic within the 2.4GHz segment.
