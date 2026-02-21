@@ -4,7 +4,8 @@
 
 **Objective:** Transition from a "flat" unmanaged network on an Apple Wi-fi 5 device, to a hardened, multi-segment architecture to minimize the attack surface and isolate high-risk IoT/Legacy assets.
 
-📋 Project Overview
+**📋 Project Overview**
+
 This project documents the end-to-end security hardening of a residential gateway. By leveraging Wi-Fi 7 management features, I implemented **VLAN-style Network Segmentation, Static DHCP Binding,** and **Layer 2/3 Isolation** to shield primary data-processing units from vulnerable IoT peripherals.
 
 **Note:** All IP addresses shown (192.168.0.x) pertain to a private internal network and are used exclusively for architectural demonstration.
