@@ -60,6 +60,18 @@ To ensure security rules and logging remain consistent, I implemented DHCP Addre
 
 [Address Reservations] https://github.com/jsknill/Home-Network-Hardening-Segmentation-Project/blob/main/Network_clients_verification.png
 
+**Phase 5: WAN Anonymization & Hardware Kill-Switch**
+
+**Identity Masking (VPN Client):** To decouple the network's external signature from the ISP (Spectrum), I implemented a router-level WireGuard tunnel using Proton VPN. By utilizing Selective Routing, only high-trust data-processing units (PCs) are tunneled, preserving low-latency routes for gaming and streaming assets.
+
+**Fail-Safe Validation (Kill-Switch Stress Test):** To prevent "IP Leakage" during tunnel instability, I enabled the Hardware Kill-Switch.
+
+**Stress Test Protocol:** Simulated an abnormal termination by introducing a synthetic endpoint mismatch (invalid Remote IP) into the configuration.
+
+**Observed Result:** Success. The Archer BE3600 correctly dropped all outbound traffic from the assigned workstations.
+
+**Verification:** Confirmed via **curl ifconfig.me** and ipleak.net that traffic resulted in a timeout rather than falling back to the ISP gateway, neutralizing the risk of accidental exposure.
+
 **🔍 Security Validation & Audit**
 To verify the integrity of the segmentation, I conducted **Layer 4 Service Analysis** and ICMP audit tests using **Fing Desktop.**
 
@@ -97,11 +109,16 @@ To verify the integrity of the segmentation, I conducted **Layer 4 Service Analy
 [Firmware Update Failure Proof] https://github.com/jsknill/Home-Network-Hardening-Segmentation-Project/blob/main/Printer_firmware_failure_proof.png
 
 **📊 Security Wins**
+
 **✅ Lateral Movement Neutralized:** A compromise of an IoT peripheral no longer grants visibility into sensitive financial or personal data.
 
 **✅ Spectrum Optimization:** Offloaded low-bandwidth IoT traffic to the 2.4GHz band.
 
 **✅ Verified Metadata Privacy:** Opted out of third-party client identification services.
+
+**✅ WAN Signature Obfuscated:** Successfully masked residential IP metadata; external auditors now see "Proton AG" rather than "Spectrum."
+
+**✅ Guaranteed Fail-Safe: ** Verified that workstations are "caged" within the VPN; they will lose internet access entirely before ever leaking data onto the public web.
 
 **Troubleshooting:** The "Local Admin" Mismatch
 During the initial setup, I encountered a common "Cloud-Lock" issue where the TP-Link Tether app attempted to restrict management to a cloud-bound TP-Link ID, preventing advanced local hardening.
@@ -127,5 +144,11 @@ Inventory Verification is Key: Identified dual-interface devices (BT/Wi-Fi) that
 **[x] IoT AP Isolation:** Prohibited lateral traffic within the 2.4GHz segment.
 
 **[x] WAN Caging:** Effectively utilized scheduling to disable internet access for high-risk assets.
+
+**[x] VPN Tunneling:** Implemented WireGuard for workstation anonymity.
+
+**[x] Fail-Safe Validation:** Verified Hardware Kill-Switch via synthetic failure.
+
+**[ ] Pi-Hole/AdGuard Home: Next Phase:** Implementation of a DNS-sinkhole for network-wide ad and tracker blocking.
 
 **[ ] Wi-Fi 7 MLO Integration:** Transition to Multi-Link Operation once compatible hardware is available.
